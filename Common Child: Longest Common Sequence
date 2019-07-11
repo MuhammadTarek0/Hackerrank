@@ -8,7 +8,9 @@ namespace ConsoleApp2
 
         static int commonChild(string first, string second)
         {
+            //Checker bools
             bool firstCharacterCheck, firstEligibilityCheck, secondCharacterCheck, secondEligibilityCheck;
+            //According to LCS princible we are creating a MATRIX to save our data in 
             int[,] mat = new int[first.Length + 1, second.Length + 1];
             //Checking the strings have the same length
             if (first.Length != second.Length)
@@ -36,21 +38,26 @@ namespace ConsoleApp2
 
             #region Algorithm
             
-            for (int i = 0; i < first.Length; i++)
+            for (int i = 0; i <= first.Length; i++)
             {
-                for (int j = 0; j < second.Length; j++)
+                for (int j = 0; j <= second.Length; j++)
                 {
-                    if (first[i] == second[j])
+                    if (i == 0 || j == 0)
                     {
-                        mat[i + 1, j + 1] = mat[i, j] + 1;
+                        mat[i, j] = 0;
+                    }
+
+                    else if (first[i - 1] == second[j - 1])
+                    {
+                        mat[i, j] = mat[i - 1, j - 1] + 1;
                     }
                     else
                     {
-                        mat[i + 1, j + 1] = mat[i + 1, j] > mat[i, j + 1] ? mat[i + 1, j] : mat[i, j + 1];
+                        mat[i, j] = mat[i - 1, j] > mat[i, j - 1] ? mat[i - 1, j] : mat[i, j - 1];
                     }
                 }
             }
-            return mat[first.Length, first.Length];
+            return mat[first.Length, second.Length];
         
             #endregion
         }
