@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+
+        static int MakeAnagram(string first, string second)
+
+        {
+            bool firstSpellingCheck, firstEligibilityCheck, secondSpellingCheck, secondEligibilityCheck;
+
+            #region Characters Count
+
+            firstEligibilityCheck = IsEligible(first, 1, (int)Math.Pow(10, 4));
+            secondEligibilityCheck = IsEligible(second, 1, (int)Math.Pow(10, 4));
+
+            #endregion
+
+            #region LowerCase Check
+            firstSpellingCheck = CheckLowerCase(first);
+            secondSpellingCheck = CheckLowerCase(second);
+            #endregion
+            
+            //Error Handling if any bool is false will return -1 and assigned 4 bools to be able to catch the error
+            if (!firstSpellingCheck || !secondSpellingCheck || !firstEligibilityCheck || !secondEligibilityCheck)
+            {
+                return -1;
+            }
+
+            #region Algorithm
+            List<char> sList = new List<char>(second);
+            int counter = 0;
+
+            for (int i = 0; i < first.Length; i++)
+            {
+                for (int j = 0; j < sList.Count; j++)
+                {
+                    if(first[i] == sList[j])
+                    {
+                        sList.RemoveAt(j);
+
+                        counter++;
+                        j = sList.Count;
+                    }
+                }
+            }
+
+            #endregion
+            return (first.Length + second.Length) - (counter * 2);
+        }
+        
+        static bool CheckLowerCase(string a)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Char.IsUpper(a,i))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        static bool IsEligible(string a, int lowerLimit, int higherLimit)
+        {
+            if(a.Length < lowerLimit || a.Length > higherLimit)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        static void Main(string[] args)
+        {
+            string a = Console.ReadLine();
+            string b = Console.ReadLine();
+
+            int res = MakeAnagram(a, b);
+
+            Console.Write(res);
+            Console.ReadKey();
+
+        }
+    }
+}
