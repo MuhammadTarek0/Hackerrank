@@ -110,8 +110,6 @@ namespace ConsoleApp2
 
         static void Main(string[] args)
         {
-            while (true)
-            {
                 string a = Console.ReadLine();
                 string b = Console.ReadLine();
 
@@ -119,7 +117,7 @@ namespace ConsoleApp2
 
                 Console.WriteLine(res);
                 Console.ReadKey();
-            }
+            
         }
     }
 }
