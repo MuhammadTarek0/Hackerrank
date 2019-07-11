@@ -1,0 +1,118 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+
+        static int commonChild(string first, string second)
+        {
+            bool firstCharacterCheck, firstEligibilityCheck, secondCharacterCheck, secondEligibilityCheck;
+            int[,] mat = new int[first.Length + 1, second.Length + 1];
+            //Checking the strings have the same length
+            if (first.Length != second.Length)
+            {
+                return -1;
+            }
+
+            #region Characters Count
+
+            firstEligibilityCheck = IsEligible(first, 1, 5*(int)Math.Pow(10, 3));
+            secondEligibilityCheck = IsEligible(second, 1, 5*(int)Math.Pow(10, 3));
+
+            #endregion
+
+            #region Upper Case Check
+            firstCharacterCheck = CheckCharacterCase(first);
+            secondCharacterCheck = CheckCharacterCase(second);
+            #endregion
+            
+            //Error Handling if any bool is false will return -1 and assigned 4 bools to be able to catch the error
+            if (!firstCharacterCheck || !secondCharacterCheck || !firstEligibilityCheck || !secondEligibilityCheck)
+            {
+                return -1;
+            }
+
+            #region Algorithm
+            
+            for (int i = 0; i < first.Length; i++)
+            {
+                for (int j = 0; j < second.Length; j++)
+                {
+                    if (first[i] == second[j])
+                    {
+                        mat[i + 1, j + 1] = mat[i, j] + 1;
+                    }
+                    else
+                    {
+                        mat[i + 1, j + 1] = mat[i + 1, j] > mat[i, j + 1] ? mat[i + 1, j] : mat[i, j + 1];
+                    }
+                }
+            }
+            return mat[first.Length, first.Length];
+        
+            #endregion
+        }
+        
+        static int CheckForSimilarChars(string a, string b, int aIndex, int bIndex, ref int counter)
+        {
+            if (aIndex >= a.Length || bIndex >= b.Length)
+            {
+                return counter;
+            }
+
+            for (int i = aIndex; i < a.Length; i++)
+            {
+                for (int j = bIndex; j < b.Length; j++)
+                {
+                    if (a[i] == b[j])
+                    {
+                        counter++;
+                        int fIndex = i + 1;
+                        int sIndex = j + 1;
+                        CheckForSimilarChars(a, b, fIndex, sIndex, ref counter);
+                        return counter;
+                    }
+                }
+            }
+            return counter;
+        }
+
+        static bool CheckCharacterCase(string a)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Char.IsLower(a,i))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        static bool IsEligible(string a, int lowerLimit, int higherLimit)
+        {
+            if(a.Length < lowerLimit || a.Length > higherLimit)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                string a = Console.ReadLine();
+                string b = Console.ReadLine();
+
+                int res = commonChild(a, b);
+
+                Console.WriteLine(res);
+                Console.ReadKey();
+            }
+        }
+    }
+}
